@@ -1,0 +1,32 @@
+{
+  "doc_1": {
+    "id": "doc_1",
+    "filename": "CV-Manal Saadi-2025- AI Engagement Manager.pdf",
+    "content_type": "application/pdf",
+    "size": 131391,
+    "temp_path": "C:\\Users\\manal\\AppData\\Local\\Temp\\tmpx4wiegzi_CV-Manal Saadi-2025- AI Engagement Manager.pdf",
+    "status": "processed",
+    "text": "[PDF text extraction unavailable - install pdfplumber or PyPDF2]\nFile: C:\\Users\\manal\\AppData\\Local\\Temp\\tmpx4wiegzi_CV-Manal Saadi-2025- AI Engagement Manager.pdf",
+    "metadata": {
+      "format": "pdf",
+      "pages": 0,
+      "characters": 0,
+      "file_size": 131391,
+      "error": "No PDF processing library available"
+    },
+    "chunks": [
+      {
+        "text": "[PDF text extraction unavailable - install pdfplumber or PyPDF2]\nFile: C:\\Users\\manal\\AppData\\Local\\Temp\\tmpx4wiegzi_CV-Manal Saadi-2025- AI Engagement Manager.pdf.",
+        "length": 165,
+        "metadata": {
+          "format": "pdf",
+          "pages": 0,
+          "characters": 0,
+          "file_size": 131391,
+          "error": "No PDF processing library available"
+        }
+      }
+    ],
+    "error": null
+  }
+}
