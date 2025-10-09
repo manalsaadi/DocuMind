@@ -36,13 +36,17 @@ export interface SearchRequest {
 
 export interface SearchResponse {
   query: string;
+  answer?: string; // Only present in RAG responses
   results: Array<{
     document_id: string;
     filename: string;
     relevance_score: number;
     snippet: string;
+    chunk_text: string;
   }>;
   total_results: number;
+  pipeline_used: boolean;
+  fallback?: string; // Only present in fallback responses
 }
 
 class ApiService {
@@ -114,6 +118,53 @@ class ApiService {
 
     if (!response.ok) {
       throw new Error(`Search failed: ${response.statusText}`);
+    }
+
+    return response.json();
+  }
+
+  /**
+   * Get RAG configuration
+   */
+  async getRAGConfig(): Promise<any> {
+    const response = await fetch(`${this.baseUrl}/api/rag/config`);
+
+    if (!response.ok) {
+      throw new Error(`Failed to get RAG config: ${response.statusText}`);
+    }
+
+    return response.json();
+  }
+
+  /**
+   * Update RAG configuration
+   */
+  async updateRAGConfig(config: any): Promise<any> {
+    const response = await fetch(`${this.baseUrl}/api/rag/config`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(config),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to update RAG config: ${response.statusText}`);
+    }
+
+    return response.json();
+  }
+
+  /**
+   * Reset RAG pipeline
+   */
+  async resetRAGPipeline(): Promise<any> {
+    const response = await fetch(`${this.baseUrl}/api/rag/reset`, {
+      method: 'POST',
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to reset RAG pipeline: ${response.statusText}`);
     }
 
     return response.json();

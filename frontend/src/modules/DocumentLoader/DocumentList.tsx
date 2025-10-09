@@ -82,15 +82,23 @@ export const DocumentList: React.FC = () => {
       <Box
         sx={{
           textAlign: 'center',
-          py: 4,
+          py: 3,
           color: 'text.secondary',
+          border: '2px dashed',
+          borderColor: 'primary.light',
+          borderRadius: 2,
+          backgroundColor: 'primary.50',
         }}
       >
-        <Typography variant="h6" gutterBottom>
+        <FileIcon sx={{ fontSize: 32, color: 'primary.main', mb: 1 }} />
+        <Typography variant="subtitle1" gutterBottom sx={{ color: 'primary.main', fontWeight: 'bold' }}>
           No documents imported yet
         </Typography>
-        <Typography variant="body2">
-          Drop some documents above to get started
+        <Typography variant="body2" sx={{ mb: 1, color: 'text.primary' }}>
+          Upload some documents above to start asking questions about your content
+        </Typography>
+        <Typography variant="caption" color="text.secondary">
+          Supported formats: PDF, DOCX, TXT, MD • Max size: 50MB per file
         </Typography>
       </Box>
     );
@@ -98,19 +106,19 @@ export const DocumentList: React.FC = () => {
 
   return (
     <Box>
-      <Typography variant="h6" gutterBottom>
+      <Typography variant="subtitle1" gutterBottom sx={{ fontSize: '1rem' }}>
         Imported Documents ({documents.length})
       </Typography>
       
       {indexingProgress > 0 && indexingProgress < 100 && (
-        <Box sx={{ mb: 2 }}>
-          <Typography variant="body2" gutterBottom>
+        <Box sx={{ mb: 1 }}>
+          <Typography variant="caption" gutterBottom>
             Indexing documents... {Math.round(indexingProgress)}%
           </Typography>
           <LinearProgress
             variant="determinate"
             value={indexingProgress}
-            sx={{ mb: 1 }}
+            sx={{ mb: 0.5 }}
           />
         </Box>
       )}
@@ -122,46 +130,48 @@ export const DocumentList: React.FC = () => {
             divider
             sx={{
               bgcolor: document.isIndexed ? 'success.light' : 'background.paper',
-              mb: 1,
+              mb: 0.5,
               borderRadius: 1,
+              py: 1,
             }}
           >
-            <ListItemIcon>
+            <ListItemIcon sx={{ minWidth: 40 }}>
               {getFileIcon(document.type)}
             </ListItemIcon>
             
             <ListItemText
               primary={
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <Typography variant="subtitle2" noWrap>
+                  <Typography variant="body2" noWrap fontWeight="medium">
                     {document.name}
                   </Typography>
                   <Chip
                     size="small"
                     label={document.type.toUpperCase()}
                     variant="outlined"
+                    sx={{ fontSize: '0.7rem', height: 20 }}
                   />
                 </Box>
               }
               secondary={
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 0.5 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 0.25 }}>
                   <Typography variant="caption">
                     {formatFileSize(document.size)}
                   </Typography>
                   <Typography variant="caption">
                     Modified: {document.lastModified.toLocaleDateString()}
                   </Typography>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.25 }}>
                     {document.isIndexed ? (
                       <>
-                        <ProcessedIcon sx={{ fontSize: 16 }} color="success" />
+                        <ProcessedIcon sx={{ fontSize: 14 }} color="success" />
                         <Typography variant="caption" color="success.main">
                           Processed
                         </Typography>
                       </>
                     ) : (
                       <>
-                        <PendingIcon sx={{ fontSize: 16 }} color="warning" />
+                        <PendingIcon sx={{ fontSize: 14 }} color="warning" />
                         <Typography variant="caption" color="warning.main">
                           Pending
                         </Typography>
@@ -177,8 +187,9 @@ export const DocumentList: React.FC = () => {
                 edge="end"
                 aria-label="delete"
                 onClick={() => handleDeleteDocument(document.id)}
+                size="small"
               >
-                <DeleteIcon />
+                <DeleteIcon sx={{ fontSize: 18 }} />
               </IconButton>
             </ListItemSecondaryAction>
           </ListItem>

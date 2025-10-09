@@ -115,13 +115,13 @@ export const DocumentDropZone: React.FC<DocumentDropZoneProps> = ({
           )}
         </Box>
 
-        <Typography variant="h6" gutterBottom>
+        <Typography variant="subtitle1" gutterBottom>
           {isDragActive
             ? 'Drop your documents here'
             : 'Drop documents or click to browse'}
         </Typography>
 
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+        <Typography variant="caption" color="text.secondary" sx={{ mb: 1 }}>
           Supported formats: PDF, DOCX, TXT, MD
           <br />
           Maximum file size: 50MB

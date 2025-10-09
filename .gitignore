@@ -94,6 +94,10 @@ out/
 *.sqlite
 *.db
 instance/
+backend/models/
+backend/vector_index.faiss
+backend/vector_index.json
+backend/documents.json
 
 # Application specific
 documents/
@@ -102,3 +106,43 @@ uploads/
 
 # Git
 .git/
+
+# RAG/AI/ML models and indices
+backend/models/
+backend/vector_index.faiss
+backend/vector_index.json
+backend/documents.json
+
+# Data, outputs, and uploads
+backend/uploads/
+backend/temp_files/
+backend/test_document.txt
+backend/vector_index.*
+
+# Cache and build artifacts
+__pycache__/
+backend/__pycache__/
+frontend/node_modules/
+frontend/dist/
+frontend/.cache/
+
+# Logs and runtime
+*.log
+logs/
+
+# Jupyter and notebook outputs
+*.ipynb_checkpoints
+
+# Miscellaneous
+*.sqlite
+*.db
+*.csv
+*.tsv
+*.bak
+*.tmp
+*.swp
+*.swo
+*~
+
+# Ignore all files in to del/
+to del/

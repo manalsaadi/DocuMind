@@ -161,86 +161,45 @@ class DOCXLoader(DocumentLoader):
             }
 
 
-class TextChunker:
-    """Handles semantic text splitting for RAG processing"""
-    
-    def __init__(self, chunk_size: int = 1000, overlap: int = 200):
-        self.chunk_size = chunk_size
-        self.overlap = overlap
-    
-    def chunk_text(self, text: str, metadata: Dict[str, Any] = None) -> List[Dict[str, Any]]:
-        """Split text into semantic chunks for RAG processing"""
-        if not text.strip():
-            return []
-        
-        # Simple sentence-aware chunking
-        sentences = text.split('. ')
-        chunks = []
-        current_chunk = ""
-        
-        for sentence in sentences:
-            # Add sentence to current chunk if it fits
-            if len(current_chunk) + len(sentence) + 2 <= self.chunk_size:
-                current_chunk += sentence + '. '
-            else:
-                # Save current chunk and start new one
-                if current_chunk:
-                    chunks.append({
-                        "text": current_chunk.strip(),
-                        "length": len(current_chunk),
-                        "metadata": metadata or {}
-                    })
-                
-                # Handle overlap
-                if self.overlap > 0 and current_chunk:
-                    overlap_text = current_chunk[-self.overlap:] if len(current_chunk) > self.overlap else current_chunk
-                    current_chunk = overlap_text + sentence + '. '
-                else:
-                    current_chunk = sentence + '. '
-        
-        # Add final chunk
-        if current_chunk:
-            chunks.append({
-                "text": current_chunk.strip(),
-                "length": len(current_chunk),
-                "metadata": metadata or {}
-            })
-        
-        return chunks
-
+from modules.rag_pipeline import TextChunker
+from sentence_transformers import SentenceTransformer
+import numpy as np
 
 class DocumentProcessor:
-    """Main document processing orchestrator"""
-    
+    """Main document processing orchestrator (now also handles chunking and embedding)"""
+
     def __init__(self):
         self.loaders = [
             PlainTextLoader(),
             PDFLoader(),
             DOCXLoader()
         ]
-        self.chunker = TextChunker()
-    
+        # Use same chunking and embedding config as RAGPipeline default
+        self.chunker = TextChunker(chunk_size=1000, overlap=200)
+        self.embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
+
     def get_loader_for_file(self, file_path: str) -> Optional[DocumentLoader]:
         """Find appropriate loader for the file type"""
         mime_type, _ = mimetypes.guess_type(file_path)
         mime_type = mime_type or ""
-        
+
         for loader in self.loaders:
             if loader.can_process(file_path, mime_type):
                 return loader
         return None
-    
+
     def process_document(self, file_path: str) -> Dict[str, Any]:
         """
-        Process a document and return extracted text, metadata, and chunks
-        
+        Process a document: extract text, metadata, chunk, and embed at upload time.
+
         Returns:
             Dict containing:
             - text: Full extracted text
             - metadata: Document metadata
-            - chunks: List of text chunks for RAG
             - status: Processing status
             - error: Error message if processing failed
+            - chunks: List of chunk dicts (with text, length, metadata)
+            - embeddings: np.ndarray of chunk embeddings (n_chunks x embedding_dim)
         """
         try:
             loader = self.get_loader_for_file(file_path)
@@ -248,39 +207,45 @@ class DocumentProcessor:
                 return {
                     "text": "",
                     "metadata": {},
-                    "chunks": [],
                     "status": "unsupported",
-                    "error": f"Unsupported file type: {Path(file_path).suffix}"
+                    "error": f"Unsupported file type: {Path(file_path).suffix}",
+                    "chunks": [],
+                    "embeddings": None
                 }
-            
-            # Extract text and metadata
             text = loader.extract_text(file_path)
             metadata = loader.extract_metadata(file_path)
-            
-            # Create chunks for RAG
-            chunks = self.chunker.chunk_text(text, metadata)
-            
+            # Chunk and embed here
+            if text.strip():
+                chunks = self.chunker.chunk_text(text, metadata)
+                if chunks:
+                    embeddings = self.embedding_model.encode([c['text'] for c in chunks], convert_to_numpy=True)
+                else:
+                    embeddings = np.empty((0, self.embedding_model.get_sentence_embedding_dimension()), dtype=np.float32)
+            else:
+                chunks = []
+                embeddings = np.empty((0, self.embedding_model.get_sentence_embedding_dimension()), dtype=np.float32)
             return {
                 "text": text,
                 "metadata": metadata,
-                "chunks": chunks,
                 "status": "processed",
-                "error": None
+                "error": None,
+                "chunks": chunks,
+                "embeddings": embeddings
             }
-            
         except Exception as e:
             return {
                 "text": "",
                 "metadata": {},
-                "chunks": [],
                 "status": "error",
-                "error": str(e)
+                "error": str(e),
+                "chunks": [],
+                "embeddings": None
             }
-    
+
     def get_supported_formats(self) -> List[str]:
         """Return list of supported file formats"""
         return ['.pdf', '.docx', '.txt', '.md']
-    
+
     def is_supported(self, file_path: str) -> bool:
         """Check if file format is supported"""
         return self.get_loader_for_file(file_path) is not None

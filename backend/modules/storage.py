@@ -48,40 +48,46 @@ class DocumentStorage:
     
     def add_document(self, doc_id: str, document_data: Dict[str, Any]):
         """Add a single document to storage"""
-        documents = self.load_documents()
-        documents[doc_id] = document_data
-        self.save_documents(documents)
+        with self._lock:
+            documents = self.load_documents()
+            documents[doc_id] = document_data
+            self.save_documents(documents)
     
     def remove_document(self, doc_id: str) -> bool:
         """Remove a document from storage"""
-        documents = self.load_documents()
-        if doc_id in documents:
-            del documents[doc_id]
-            self.save_documents(documents)
-            return True
-        return False
+        with self._lock:
+            documents = self.load_documents()
+            if doc_id in documents:
+                del documents[doc_id]
+                self.save_documents(documents)
+                return True
+            return False
     
     def get_document(self, doc_id: str) -> Dict[str, Any] | None:
         """Get a specific document by ID"""
-        documents = self.load_documents()
-        return documents.get(doc_id)
+        with self._lock:
+            documents = self.load_documents()
+            return documents.get(doc_id)
     
     def document_exists(self, doc_id: str) -> bool:
         """Check if document exists in storage"""
-        documents = self.load_documents()
-        return doc_id in documents
+        with self._lock:
+            documents = self.load_documents()
+            return doc_id in documents
     
     def update_document(self, doc_id: str, updates: Dict[str, Any]):
         """Update specific fields of a document"""
-        documents = self.load_documents()
-        if doc_id in documents:
-            documents[doc_id].update(updates)
-            self.save_documents(documents)
+        with self._lock:
+            documents = self.load_documents()
+            if doc_id in documents:
+                documents[doc_id].update(updates)
+                self.save_documents(documents)
     
     def list_all_documents(self) -> List[Dict[str, Any]]:
         """Get list of all documents"""
-        documents = self.load_documents()
-        return list(documents.values())
+        with self._lock:
+            documents = self.load_documents()
+            return list(documents.values())
     
     def cleanup_orphaned_files(self):
         """Remove temporary files for documents not in storage"""
