@@ -29,19 +29,21 @@ documind/
 
 ## 🏗️ Architecture
 
+
 **Modular RAG System** with clear separation of concerns:
 
 ### Application-Level Modules
 - **UI Module**: React components with Material-UI
-- **Orchestrator Module**: Coordinates RAG pipeline (coming next)
+- **Orchestrator Module**: Coordinates RAG pipeline
 - **Data Manager Module**: Local state management (Zustand)
 
-### Core RAG Modules (Phase 2)
-- **Document Loader**: Multi-format file processing
-- **Text Chunker**: Semantic text splitting
-- **Embedding Module**: Vector generation
-- **Vector DB Module**: ChromaDB integration
-- **LLM Module**: Qwen 3 4B integration
+### Backend Pipeline (Current)
+- **DocumentProcessor**: Handles text extraction, chunking, and embedding at upload time. As soon as a document is uploaded, it is split into semantic chunks and embedded using sentence-transformers. Chunks and embeddings are immediately stored in the vector index (FAISS).
+- **RAGPipeline**: Handles only retrieval, rerank, and LLM generation at query time. No corpus embedding or chunking is performed at query time.
+- **VectorStore (FAISS)**: Stores all chunk embeddings and metadata. Deletion of a document removes all its chunks/embeddings from the vector index.
+
+**Key Principle:**
+- Chunking and embedding are performed once at upload. Querying never triggers corpus embedding or chunking—only retrieval, rerank, and generation.
 
 ## 🔒 Privacy First
 

@@ -7,51 +7,46 @@ This document describes the architecture and pipeline of the DocuMind Retrieval-
 
 ## Pipeline Steps
 
-### 1. Document Ingestion & Chunking
+
+### 1. Document Ingestion, Chunking & Embedding (at Upload)
 - **Description:**
   - Users upload documents (PDF, DOCX, TXT, etc.) via FastAPI endpoints.
-  - Text is extracted and split into semantic chunks for downstream processing.
+  - Text is extracted, split into semantic chunks, and embedded immediately at upload time.
+  - Chunking and embedding are performed in the `DocumentProcessor` as soon as the document is uploaded.
 - **Tools:**
   - FastAPI (API)
   - pdfplumber, python-docx (text extraction)
-  - Integrated `TextChunker` in RAG pipeline (configurable chunk size 1000 chars, overlap 200 chars)
+  - `TextChunker` (for chunking)
+  - `sentence-transformers/all-MiniLM-L6-v2` (for embedding)
 
-### 2. Embedding Generation
-- **Description:**
-  - Each chunk is converted into a vector embedding for semantic search.
-- **Tools:**
-  - [sentence-transformers/all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) (80MB, fast, CPU-friendly)
-  - `sentence-transformers` Python library
 
-### 3. Vector Store
+### 2. Vector Store
 - **Description:**
-  - Embeddings are stored in a vector database for efficient similarity search.
+  - Embeddings for all document chunks are stored in a vector database (FAISS) at upload time.
+  - No embedding or chunking is performed at query time.
 - **Tools:**
   - [FAISS](https://github.com/facebookresearch/faiss) (local, in-memory, free)
-  - Optionally, [ChromaDB](https://www.trychroma.com/) (free, persistent)
 
-### 4. Retrieval
+
+### 3. Retrieval (at Query Time)
 - **Description:**
   - For a user query, generate its embedding and retrieve the top-N most similar chunks from the vector store.
+  - No corpus embedding or chunking is performed at query time—only retrieval, rerank, and generation.
 - **Tools:**
   - `sentence-transformers` (for query embedding)
   - FAISS (for similarity search)
 
-### 5. Reranking
-- **Description:**
-  - Retrieved chunks are reranked for true semantic relevance using a cross-encoder reranker.
-- **Tools:**
-  - [cross-encoder/ms-marco-MiniLM-L-6-v2](https://huggingface.co/cross-encoder/ms-marco-MiniLM-L-6-v2) (420MB, CPU-friendly)
-  - `sentence-transformers` or `transformers` library
 
-### 6. Augmentation & Generation
+### 4. Reranking & Generation (at Query Time)
 - **Description:**
+  - Retrieved chunks are reranked for semantic relevance using a cross-encoder reranker.
   - The top reranked chunks are concatenated as context and sent to a local LLM to generate an answer.
 - **Tools:**
+  - [cross-encoder/ms-marco-MiniLM-L-6-v2](https://huggingface.co/cross-encoder/ms-marco-MiniLM-L-6-v2) (420MB, CPU-friendly)
   - [TinyLlama-1.1B-Chat](https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF) (1.5GB, runs on CPU)
+  - `sentence-transformers` or `transformers` library
   - `llama-cpp-python` library with GGUF model support
   - Parameters: 2048 context window, temperature 0.7, top-p 0.9
-  - `llama-cpp-python` (for local inference)
 
 ---
 
@@ -74,21 +69,28 @@ This document describes the architecture and pipeline of the DocuMind Retrieval-
 
 ## Pipeline Diagram
 
+
 ```
-[User Uploads] → [Text Extraction & Chunking] → [Embedding Model]
-      ↓                                             ↓
-[Document Storage] ← [FAISS Vector DB] ← [Embeddings]
-      ↓                                             ↑
+[User Uploads]
+  ↓
+[Text Extraction, Chunking & Embedding (DocumentProcessor)]
+  ↓
+[FAISS Vector DB] ← [Document Storage]
+  ↑
 [User Query] → [Query Embedding] → [FAISS Search] → [Reranker]
-      ↓
+  ↓
 [Top Chunks] → [LLM Generation] → [Answer]
 ```
 
 ---
 
+
 ## All Tools Are Free & Local
 - No paid APIs, no cloud required.
 - All models and databases run on your own machine.
+
+## Key Principle
+- Chunking and embedding are performed once at upload. Querying never triggers corpus embedding or chunking—only retrieval, rerank, and generation.
 
 ---
 
