@@ -18,5 +18,165 @@
     },
     "error": null,
     "rag_indexed": true
+  },
+  "doc_2_1760298233": {
+    "id": "doc_2_1760298233",
+    "filename": "doc1.txt",
+    "originalName": "doc1.txt",
+    "size": 9,
+    "mimeType": "text/plain",
+    "uploadedAt": "2025-10-12T21:43:53.600326",
+    "lastModified": "2025-10-12T21:43:53.600326",
+    "status": "processed",
+    "filePath": "C:\\Users\\manal\\AppData\\Local\\Temp\\tmpkzmhd4vf_doc1.txt",
+    "text": "Content 1",
+    "metadata": {
+      "format": "text",
+      "pages": 1,
+      "characters": 9,
+      "file_size": 9
+    },
+    "error": null,
+    "rag_indexed": true
+  },
+  "doc_3_1760298233": {
+    "id": "doc_3_1760298233",
+    "filename": "doc2.txt",
+    "originalName": "doc2.txt",
+    "size": 9,
+    "mimeType": "text/plain",
+    "uploadedAt": "2025-10-12T21:43:53.710777",
+    "lastModified": "2025-10-12T21:43:53.710777",
+    "status": "processed",
+    "filePath": "C:\\Users\\manal\\AppData\\Local\\Temp\\tmpgaetiyiy_doc2.txt",
+    "text": "Content 2",
+    "metadata": {
+      "format": "text",
+      "pages": 1,
+      "characters": 9,
+      "file_size": 9
+    },
+    "error": null,
+    "rag_indexed": true
+  },
+  "doc_4_1760298233": {
+    "id": "doc_4_1760298233",
+    "filename": "doc1.txt",
+    "originalName": "doc1.txt",
+    "size": 9,
+    "mimeType": "text/plain",
+    "uploadedAt": "2025-10-12T21:43:53.866936",
+    "lastModified": "2025-10-12T21:43:53.866936",
+    "status": "processed",
+    "filePath": "C:\\Users\\manal\\AppData\\Local\\Temp\\tmpbydkxdq8_doc1.txt",
+    "text": "Content 1",
+    "metadata": {
+      "format": "text",
+      "pages": 1,
+      "characters": 9,
+      "file_size": 9
+    },
+    "error": null,
+    "rag_indexed": true
+  },
+  "doc_5_1760298234": {
+    "id": "doc_5_1760298234",
+    "filename": "doc2.txt",
+    "originalName": "doc2.txt",
+    "size": 9,
+    "mimeType": "text/plain",
+    "uploadedAt": "2025-10-12T21:43:54.114748",
+    "lastModified": "2025-10-12T21:43:54.114748",
+    "status": "processed",
+    "filePath": "C:\\Users\\manal\\AppData\\Local\\Temp\\tmpwfkxdniq_doc2.txt",
+    "text": "Content 2",
+    "metadata": {
+      "format": "text",
+      "pages": 1,
+      "characters": 9,
+      "file_size": 9
+    },
+    "error": null,
+    "rag_indexed": true
+  },
+  "doc_6_1760298801": {
+    "id": "doc_6_1760298801",
+    "filename": "doc1.txt",
+    "originalName": "doc1.txt",
+    "size": 9,
+    "mimeType": "text/plain",
+    "uploadedAt": "2025-10-12T21:53:21.500601",
+    "lastModified": "2025-10-12T21:53:21.500601",
+    "status": "processed",
+    "filePath": "C:\\Users\\manal\\AppData\\Local\\Temp\\tmppr61155l_doc1.txt",
+    "text": "Content 1",
+    "metadata": {
+      "format": "text",
+      "pages": 1,
+      "characters": 9,
+      "file_size": 9
+    },
+    "error": null,
+    "rag_indexed": true
+  },
+  "doc_7_1760298802": {
+    "id": "doc_7_1760298802",
+    "filename": "doc2.txt",
+    "originalName": "doc2.txt",
+    "size": 9,
+    "mimeType": "text/plain",
+    "uploadedAt": "2025-10-12T21:53:22.606499",
+    "lastModified": "2025-10-12T21:53:22.606499",
+    "status": "processed",
+    "filePath": "C:\\Users\\manal\\AppData\\Local\\Temp\\tmptnjruyqt_doc2.txt",
+    "text": "Content 2",
+    "metadata": {
+      "format": "text",
+      "pages": 1,
+      "characters": 9,
+      "file_size": 9
+    },
+    "error": null,
+    "rag_indexed": true
+  },
+  "doc_8_1760298802": {
+    "id": "doc_8_1760298802",
+    "filename": "doc1.txt",
+    "originalName": "doc1.txt",
+    "size": 9,
+    "mimeType": "text/plain",
+    "uploadedAt": "2025-10-12T21:53:22.959949",
+    "lastModified": "2025-10-12T21:53:22.959949",
+    "status": "processed",
+    "filePath": "C:\\Users\\manal\\AppData\\Local\\Temp\\tmpuze7qr4g_doc1.txt",
+    "text": "Content 1",
+    "metadata": {
+      "format": "text",
+      "pages": 1,
+      "characters": 9,
+      "file_size": 9
+    },
+    "error": null,
+    "rag_indexed": true
+  },
+  "doc_9_1760298803": {
+    "id": "doc_9_1760298803",
+    "filename": "doc2.txt",
+    "originalName": "doc2.txt",
+    "size": 9,
+    "mimeType": "text/plain",
+    "uploadedAt": "2025-10-12T21:53:23.097694",
+    "lastModified": "2025-10-12T21:53:23.097694",
+    "status": "processed",
+    "filePath": "C:\\Users\\manal\\AppData\\Local\\Temp\\tmpgigs69us_doc2.txt",
+    "text": "Content 2",
+    "metadata": {
+      "format": "text",
+      "pages": 1,
+      "characters": 9,
+      "file_size": 9
+    },
+    "error": null,
+    "rag_indexed": true
   }
 }
